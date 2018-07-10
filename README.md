@@ -31,6 +31,58 @@ The preprocessing includes
 	2. The other data augmentation codes which includes rotation, shear, scale, translation, noise, dropouts, contrast changes etc. are standard image processing.
 	3. The image is finally normalized for the used model by the built in "fastai" ModelData class.
 
+**Augmentation Code**
+```python
+import imgaug as ia
+from imgaug import augmenters as iaa
+
+train_data_aug = iaa.Sequential(
+    [
+        iaa.SomeOf((1, 3),
+            [
+                iaa.Affine(
+                    scale=(0.7, 1.1),
+                    translate_percent={"x": (-0.1, 0.1), "y": (0.1, 0.1)},
+                    rotate=(-30, 30),
+                    shear=(-30, 30),
+                    order=[0, 1],
+                    cval=(0, 0),
+                ),
+                iaa.OneOf([
+                    iaa.AdditiveGaussianNoise(
+                        loc=0, scale=(0.0, 0.15*255)
+                    ),
+                    iaa.SaltAndPepper(0.15),
+                    iaa.Salt(0.15)
+                ]),
+
+                iaa.OneOf([
+                    iaa.Dropout((0.01, 0.05)),
+                    iaa.CoarseDropout(
+                        (0.03, 0.06), size_percent=(0.02, 0.04)
+                    ),
+                ]),
+
+                iaa.OneOf([
+                        iaa.OneOf([
+                            iaa.GaussianBlur((3.0, 4.0)),
+                            iaa.AverageBlur(k=(5, 7)),
+                        ]),
+
+                        iaa.Add((-10, 10), per_channel=0.5),
+                    
+                        iaa.Multiply((0.5, 1.5), per_channel=0.5),
+                        
+                        iaa.ContrastNormalization((0.5, 2.0), per_channel=0.5),
+                ]),
+            ],
+            # do all of the above augmentations in random order
+            random_order=True
+        )
+    ],
+)
+```
+
 c. Description of the model used
 --------------------------------
 We used standart "ResNext" convolutional model without any change in layers except for finetuning the output layer using softmax activation. We used the pretrained weights from imagenet as the initial model weights. The learning rate used to update the model weights was 1e-3 and there were around 5 to 6 epochs for the actual training of the model.
