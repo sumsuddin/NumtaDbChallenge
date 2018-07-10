@@ -1,0 +1,33 @@
+Extracting the attached file should produce the following directory structure (test and train data directories were not provided),
+
+└───numta
+    ├───Fastai_gen
+    │   └───models
+    ├───overlays
+    │   ├───0
+    │   ├───1
+    │   ├───2
+    │   ├───3
+    │   ├───4
+    │   ├───5
+    │   ├───6
+    │   ├───7
+    │   ├───8
+    │   └───9
+    ├───testing-a
+    ├───testing-auga
+    ├───testing-augc
+    ├───testing-b
+    ├───testing-c
+    ├───testing-d
+    ├───testing-e
+    ├───testing-f
+    ├───training-a
+    ├───training-b
+    ├───training-c
+    ├───training-d
+    └───training-e
+
+Here all the test and training data are available along with an additional "overlays" directory. This "overlays" directory contains the generated overlays for the training. We used those images for all the training. So they are attached. But it can be generated again by the scripts attached. The discussion about the "overlays" generation process is described later.
+
+The script should have write permission to 'numta' directory as the augmentation files will be generated there.
